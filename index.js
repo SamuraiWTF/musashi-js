@@ -1,31 +1,15 @@
 require('dotenv').config()
 
-const express = require("express");
+const corsApiPort = process.env.CORS_API_PORT || 3020;
+const corsClientPort = process.env.CORS_CLIENT_PORT || 3021;
 
-const cookieParser = require("cookie-parser");
+const corsApi = require('./api.cors.demo/app');
+const corsClient = require('./client.cors.demo/app');
 
-const api = express();
-
-const client = express();
-
-const apiHttpPort = process.env.CORS_API_PORT;
-const clientHttpPort = process.env.CORS_CLIENT_PORT;
-
-api.use(express.json({ type: "*/*" }));
-api.use(cookieParser());
-
-client.use(express.static("client.cors.demo"));
-
-//Add CORS routes
-api.use("/auth", require("./server.cors.demo/routes/auth"));
-api.use("/sop", require("./server.cors.demo/routes/sop"));
-api.use("/pattern", require("./server.cors.demo/routes/pattern"));
-api.use("/reflect", require("./server.cors.demo/routes/reflect"));
-
-api.listen(apiHttpPort, () =>
-  console.log(`cors.dem server listening on port ${apiHttpPort}`)
+corsApi.listen(corsApiPort, () =>
+  console.log(`CORS demo API server listening on port ${corsApiPort}`)
 );
 
-client.listen(clientHttpPort, () =>
-  console.log(`cors.dem client available on port ${clientHttpPort}`)
+corsClient.listen(corsClientPort, () =>
+  console.log(`CORS demo client available on port ${corsClientPort}`)
 );
