@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CORS Demo</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/bulma.min.css" />
+</head>
+
+<body>
+  <section class="hero is-dark is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          CORS
+        </h1>
+        <h2 class="subtitle">
+          Cross-Origin Resource Sharing - Demonstation
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section class="section has-background-light">
+    <div class="container">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label">http://</label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <p class="control">
+                    <input class="input is-rounded is-normal" id="apiUrlTextbox" type="text" data-tippy="For repointing the API hostname." data-tippy-arrow="true" data-tippy-distance="15"  placeholder="API Host/Port">
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <div class="tabs is-toggle is-toggle-rounded">
+              <ul>
+                <li class="is-active" id="corsTab_sop" name="corsTabs">
+                  <a data-tippy="No CORS Policy at all. SOP will be enforced." data-tippy-arrow="true" data-tippy-distance="30">
+                    <span>Same-Origin</span>
+                  </a>
+                </li>
+                <li id="corsTab_reflected" name="corsTabs">
+                  <a data-tippy="All origins are reflected into the CORS policy." data-tippy-arrow="true" data-tippy-distance="30">
+                    <span>Reflected</span>
+                  </a>
+                </li>
+                <li id="corsTab_regex" name="corsTabs">
+                  <a data-tippy="A pattern is used to decide whether the origin should be reflected. This pattern has a flaw." data-tippy-arrow="true" data-tippy-distance="30">
+                    <span>Regex</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="section">
+    <div class="content">
+      <div class="columns">
+        <div class="column">
+          <h4 class="subtitle">Requests</h2>
+      <p>
+      <div class="card">
+        <header class="card-header has-background-dark is-bold">
+<div class="level">
+          <div class="level-item"><h4 class="subtitle has-text-light">Login <span class="tag is-info is-rounded">POST</span></h4></div>
+      </div>
+      </header>
+      <div class="card-content has-background-light">
+        <b>Set the cookie-based session.</b> This particular endpoint is set to always reflect the origin. Any creds will work.
+        <input class="input" id="postAuthUsername" type="text" placeholder="Username">
+        <input class="input" id="postAuthPassword" type="password" placeholder="Password">
+      </div>
+      <footer class="card-footer has-background-light">
+        <a class="button is-link" href="javascript:_apiActions.postAuth();">Send</a>
+      </footer>
+    </div>
+    </p>
+    <p>
+      <div class="card">
+        <header class="card-header has-background-dark is-bold">
+          <div class="level">
+            <div class="level-item">
+              <h4 class="subtitle has-text-light">List Items <span class="tag is-success is-rounded">GET</span></h4></div>
+          </div>
+        </header>
+        <div class="card-content has-background-light">
+          <b>Get a list of all the persisted items.</b> This will start as an empty array. Returns UIDs that can be used to look up detail records.
+        </div>
+        <footer class="card-footer has-background-light">
+          <a class="button is-link" href="javascript:_apiActions.listObjects()">Send</a>
+        </footer>
+      </div>
+    </p>
+    <p>
+      <div class="card">
+        <header class="card-header has-background-dark is-bold">
+          <div class="level">
+            <div class="level-item">
+              <h4 class="subtitle has-text-light">Create Item <span class="tag is-info is-rounded">POST</span></h4></div>
+          </div>
+        </header>
+        <div class="card-content has-background-light">
+          <b>Create a new item in the database.</b> Any valid JSON, but must have a <i>name</i> attribute.
+          <div class="control">
+            <textarea class="textarea" id="insertObjectJson" type="text" placeholder="{&NewLine;  &quot;name&quot;: &quot;Nathan&quot;,&NewLine;  &quot;title&quot;: &quot;Mail Room Technician&quot;&NewLine;}"></textarea>
+          </div>
+        </div>
+        <footer class="card-footer has-background-light">
+          <a class="button is-link" href="javascript:_apiActions.insertObject();">Send</a>
+        </footer>
+      </div>
+    </p>
+    <p>
+      <div class="card">
+        <header class="card-header has-background-dark is-bold">
+          <div class="level">
+            <div class="level-item">
+              <h4 class="subtitle has-text-light">Read Item Details <span class="tag is-success is-rounded">GET</span></h4></div>
+          </div>
+        </header>
+        <div class="card-content has-background-light">
+          <b>Get detailed item record.</b> Will include any custom attributes, as well as LokiDB metadata.
+          <input class="input" id="getObjectUid" type="text" placeholder="UID" />
+        </div>
+        <footer class="card-footer has-background-light">
+          <a class="button is-link" href="javascript:_apiActions.getObjectDetails();">Send</a>
+        </footer>
+      </div>
+    </p>
+    <p>
+      <div class="card">
+        <header class="card-header has-background-dark is-bold">
+          <div class="level">
+            <div class="level-item">
+              <h4 class="subtitle has-text-light">Update Item <span class="tag is-warning is-rounded">PUT</span></h4>
+            </div>
+          </div>
+        </header>
+        <!-- Update Item -->
+        <div class="card-content has-background-light">
+          <b>Replace existing item with new content.</b> As a full replacement, this must still inlcude the <i>name</i> attribute.
+          <input class="input" type="text" id="updateObjectUid" placeholder="UID" />
+          <textarea class="textarea" type="text" id="updateObjectJson" placeholder="{&NewLine;  &quot;name&quot;: &quot;Nathan&quot;,&NewLine;  &quot;title&quot;: &quot;Mail Room Technician&quot;&NewLine;}"></textarea>
+        </div>
+        <footer class="card-footer has-background-light">
+          <a class="button is-link" href="javascript:_apiActions.updateObject();">Send</a>
+        </footer>
+      </div>
+    </p>
+    <p>
+      <div class="card">
+        <header class="card-header has-background-dark is-bold">
+          <div class="level">
+            <div class="level-item">
+              <h4 class="subtitle has-text-light">Delete Item <span class="tag is-danger is-rounded">DELETE</span></h4></div>
+          </div>
+        </header>
+        <div class="card-content has-background-light">
+          <b>Delete existing item from the database.</b>
+          <input class="input" type="text" id="deleteObjectUid" placeholder="UID" />
+        </div>
+        <footer class="card-footer has-background-light">
+          <a class="button is-link" href="javascript:_apiActions.deleteObject();">Send</a>
+        </footer>
+      </div>
+    </p>
+  </div>
+  <div id="responseColumn" class="column">
+    <h4 class="subtitle">Response</h2>
+  <div class="control">
+  <textarea class="textarea" id="responseBox" type="text" placeholder="Response object" readonly></textarea>
+  <footer class="card-footer has-background-light">
+    <a class="button is-danger" href="javascript:clearResponseBox();" data-tippy="Clear the response textbox." data-tippy-delay="[500, 0]" data-tippy-arrow="true">Clear</a>
+  </footer>
+</div>
+</div>
+  </div>
+</div>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/tippy.min.js"></script>
+  <script type="text/javascript">
+  let _corsPolicy = (function(){
+    let currentPolicy = 'sop';
+    return {
+      set: function(val) {
+        currentPolicy = val;
+      },
+      get: function() {
+        return currentPolicy;
+      }
+    }
+  })();
+  let _apiUrl = (function() {
+    let textbox = document.getElementById('apiUrlTextbox');
+    let currentApiUrl = 'api.cors.dem';
+    textbox.value = currentApiUrl;
+    return {
+      set: function(val) {
+        textbox.value = val;
+        currentApiUrl = val;
+      },
+      get: function() {
+        return currentApiUrl;
+      }
+    }
+  })();
+
+  function updateResponseBox(content) {
+    content.target.response;
+  }
+
+  function showRequestError(event) {
+    document.getElementById('responseBox').value = 'There was some sort of request error. Check your developer console.';
+  }
+
+  function clearResponseBox() {
+    document.getElementById('responseBox').value = '';
+  }
+
+  let _apiActions = {
+    postAuth: function() {
+      let body = {
+        username: document.getElementById('postAuthUsername').value,
+        password: document.getElementById('postAuthPassword').value
+      }
+
+      let req = new XMLHttpRequest();
+      req.addEventListener("load", updateResponseBox);
+      req.open('POST', `http:\\\\${_apiUrl.get()}\\auth\\login`);
+      req.withCredentials = true;
+      req.send(JSON.stringify(body));
+    },
+    listObjects: function() {
+      let req = new XMLHttpRequest();
+      req.addEventListener("load", updateResponseBox);
+      req.addEventListener("error", showRequestError);
+      req.open('GET', `http:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object?ts=${Date.now()}`);
+      req.withCredentials = true;
+      req.send();
+    },
+    insertObject: function() {
+      let payload = JSON.stringify(JSON.parse(document.getElementById('insertObjectJson').value));
+      let req = new XMLHttpRequest();
+      req.addEventListener("load", updateResponseBox);
+      req.open('POST', `http:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object`);
+      req.withCredentials = true;
+      req.send(payload);
+    },
+    getObjectDetails: function() {
+      let req = new XMLHttpRequest();
+      let uid = document.getElementById('getObjectUid').value;
+      req.addEventListener("load", updateResponseBox);
+      req.open('GET', `http:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}?ts=${Date.now()}`);
+      req.withCredentials = true;
+      req.send();
+    },
+    updateObject: function() {
+      let req = new XMLHttpRequest();
+      let payload = JSON.stringify(JSON.parse(document.getElementById('updateObjectJson').value));
+      let uid = document.getElementById('updateObjectUid').value;
+      req.addEventListener("load", updateResponseBox);
+      req.open('PUT', `http:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}`);
+      req.withCredentials = true;
+      req.send(payload);
+    },
+    deleteObject: function() {
+      let req = new XMLHttpRequest();
+      let uid = document.getElementById('deleteObjectUid').value;
+      req.addEventListener("load", updateResponseBox);
+      req.open('DELETE', `http:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}`);
+      req.withCredentials = true;
+      req.send();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+
+    let corsTabRegex = document.getElementById('corsTab_regex');
+    let corsTabSop = document.getElementById('corsTab_sop');
+    let corsTabReflected = document.getElementById('corsTab_reflected');
+
+    let tabGroup = document.getElementsByName('corsTabs');
+
+    document.getElementById('apiUrlTextbox').addEventListener('blur', (event) => {
+        _apiUrl.set(event.target.value);
+        alert(`Updated API server to ${event.target.value}`);
+    });
+
+    corsTabRegex.addEventListener('click', (function(tab, group) {
+        return function() {
+          Array.from(group).map((item) => {
+            item.classList.remove('is-active');
+          });
+          tab.classList.add('is-active');
+          _corsPolicy.set('pattern');
+        }
+    })(corsTabRegex, tabGroup));
+
+    corsTabSop.addEventListener('click', (function(tab, group) {
+        return function() {
+          Array.from(group).map((item) => {
+            item.classList.remove('is-active');
+          });
+          tab.classList.add('is-active');
+          _corsPolicy.set('sop');
+        }
+    })(corsTabSop, tabGroup));
+
+    corsTabReflected.addEventListener('click', (function(tab, group) {
+        return function() {
+          Array.from(group).map((item) => {
+            item.classList.remove('is-active');
+          });
+          tab.classList.add('is-active');
+          _corsPolicy.set('reflect');
+        }
+    })(corsTabReflected, tabGroup));
+
+    if(document.location.search.length > 1) {
+      let queryString = document.location.search.substring(1).split('&').reduce((ars, ar) => { let ar1 = ar.split('='); ars[ar1[0]] = ar1[1]; return ars}, {});
+      if(queryString.apiUrl) {
+        _apiUrl.set(queryString.apiUrl);
+      }
+    }
+  });
+  </script>
+</body>
+</html>
