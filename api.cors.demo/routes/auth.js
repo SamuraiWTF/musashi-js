@@ -3,7 +3,6 @@ const router = express.Router();
 
 const cors = require("cors");
 const sessionLoader = require("../middleware/cookieSessionLoader");
-const sessionBouncer = require("../middleware/cookieSessionBouncer");
 
 const authCtrlr = require("../controllers/cookieAuth");
 
