@@ -17,5 +17,8 @@
   },
   "scripts": {
     "start": "nodemon index.js"
+  },
+  "devDependencies": {
+    "standard": "^12.0.1"
   }
 }

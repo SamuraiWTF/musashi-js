@@ -1,7 +1,6 @@
-const loki = require("lokijs");
-const uuid = require("uuid/v4");
+const Loki = require('lokijs')
 
-const db = new loki("db.json");
+const db = new Loki('db.json')
 
-exports.objects = db.addCollection("objects");
-exports.session = db.addCollection("session");
+exports.objects = db.addCollection('objects')
+exports.session = db.addCollection('session')

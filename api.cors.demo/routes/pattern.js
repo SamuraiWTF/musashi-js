@@ -1,27 +1,27 @@
-const express = require("express");
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const cors = require("cors");
-const sessionLoader = require("../middleware/cookieSessionLoader");
-const sessionBouncer = require("../middleware/cookieSessionBouncer");
+const cors = require('cors')
+const sessionLoader = require('../middleware/cookieSessionLoader')
+const sessionBouncer = require('../middleware/cookieSessionBouncer')
 
-const dataCtrlr = require("../controllers/data");
+const dataCtrlr = require('../controllers/data')
 
-const cors_options = {
+const corsOptions = {
   origin: /cors\.dem$/,
-  methods: "GET,POST,PUT,DELETE",
+  methods: 'GET,POST,PUT,DELETE',
   credentials: true
-};
-router.use(cors(cors_options));
+}
+router.use(cors(corsOptions))
 
-router.use(sessionLoader);
-router.use(sessionBouncer);
+router.use(sessionLoader)
+router.use(sessionBouncer)
 
-router.options("*", cors(cors_options));
-router.get("/object", dataCtrlr.list_objects);
-router.post("/object", dataCtrlr.create_object);
-router.get("/object/:uid", dataCtrlr.read_object);
-router.put("/object/:uid", dataCtrlr.update_object);
-router.delete("/object/:uid", dataCtrlr.delete_object);
+router.options('*', cors(corsOptions))
+router.get('/object', dataCtrlr.listObjects)
+router.post('/object', dataCtrlr.createObject)
+router.get('/object/:uid', dataCtrlr.readObject)
+router.put('/object/:uid', dataCtrlr.updateObject)
+router.delete('/object/:uid', dataCtrlr.deleteObject)
 
-module.exports = router;
+module.exports = router
