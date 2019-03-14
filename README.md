@@ -1,4 +1,5 @@
 # musashi-js
+[![Build Status](https://travis-ci.org/SamuraiWTF/musashi-js.svg?branch=master)](https://travis-ci.org/SamuraiWTF/musashi-js)
 Musashi.js is a set of Node applications for demonstrating web security concepts. Created for use in Samurai WTF.
 
 ***Only the CORS Demonstrator is ready for general use at this time, the other parts are still under development***
