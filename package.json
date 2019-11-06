@@ -16,9 +16,14 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "test": "nyc --reporter=text mocha"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0",
+    "sinon": "^7.2.7",
     "standard": "^12.0.1"
   }
 }
