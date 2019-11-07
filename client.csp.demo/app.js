@@ -13,14 +13,16 @@ app.use(resHeaders({
   'Cache-Control': 'no-cache',
 }))
 
+app.use(express.static('client.csp.demo/static'))
+
 global.csp = `default-src 'self'`
 global.cspDirectives = { 'default-src': `'self'` }
 
 const globalCsp = (req, res, next) => {
   if(global.csp.trim().length > 0) {
     res.set('Content-Security-Policy', global.csp)
-    next()
   }
+  next()
 }
 
 const constructCSP = ((supportedDirectives)=>{
@@ -35,12 +37,13 @@ const constructCSP = ((supportedDirectives)=>{
 })(supportedDirectives)
 
 app.get('/', globalCsp, (req, res) => res.render('index'))
-app.get('/set-csp', (req, res) => res.render('set-csp', { allDirectives: supportedDirectives, currDirectives: cspDirectives }))
+app.post('/', express.urlencoded(), globalCsp, (req, res) => res.render('index', { payload: req.body.unsafeReflection }))
+app.get('/set-csp', (req, res) => res.render('set-csp', { msg: req.query.msg, allDirectives: supportedDirectives, currDirectives: cspDirectives }))
 app.post('/set-csp', express.urlencoded(), (req, res) => {
   csp = constructCSP(req.body)
   console.log(`CSP set to ${csp}`)
   cspDirectives = req.body
-  res.redirect('/set-csp')
+  res.redirect(`/set-csp?msg=${encodeURIComponent('The CSP has been updated')}`)
 })
 
 module.exports = app
