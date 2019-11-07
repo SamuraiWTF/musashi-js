@@ -16,7 +16,7 @@ app.use(resHeaders({
 app.use(express.static('client.csp.demo/static'))
 
 global.csp = `default-src 'self'`
-global.cspDirectives = { 'default-src': `'self'` }
+global.cspDirectives = { 'default-src': `'self'`, 'use-default-src': 'on' }
 
 const globalCsp = (req, res, next) => {
   if(global.csp.trim().length > 0) {

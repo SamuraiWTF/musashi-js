@@ -3,17 +3,38 @@
 {% block pageTitle %} - Set the CSP{% endblock %}
 
 {% block body %}
-Set your CSP below.
-
-<form method="POST" action="/set-csp">
-
-<ul style="list-style-type:none" id="directiveList">
-  {% for directive in allDirectives %}
-    <li><input name="use-{{ directive }}" type="checkbox"{% if currDirectives['use-' + directive] %}checked="checked"{% endif %} />{{ directive }}<input name="{{ directive }}" type="text" value="{% if currDirectives[directive] %}{{currDirectives[directive]}}{% endif %}"></li>
-  {% endfor %}
-</ul>
-<button type="submit">Submit</button>
-<div id="msg">{{ msg }}</div>
-</form>
-<script src="cspForm.js"></script>
+<section class="hero is-small is-info is-bold">
+  <h2 class="subtitle">Set your CSP below.</h1>
+</section>
+<section class="section">
+  <form method="POST" action="/set-csp">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            Enable
+          </th>
+          <th>
+            Directive
+          </th>
+          <th>
+            Value
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for directive in allDirectives %}
+        <tr>
+           <td><input name="use-{{ directive }}" type="checkbox" {% if currDirectives['use-' + directive] %}checked="checked"{% endif %} /></th>
+           <td>{{ directive }}</td>
+           <td><input name="{{ directive }}" type="text" value="{% if currDirectives[directive] %}{{currDirectives[directive]}}{% endif %}"/></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  <button class="button is-danger" type="submit">Submit</button>
+  <div id="msg">{{ msg }}</div>
+  </form>
+</section>
+<!--script src="cspForm.js"></script-->
 {% endblock %}
