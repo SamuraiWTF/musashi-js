@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const authSubRouter = express.Router({ mergeParams: true })
 
 const cors = require('cors')
 const sessionLoader = require('../middleware/cookieSessionLoader')
@@ -14,14 +15,17 @@ const corsOptions = {
 }
 router.use(cors(corsOptions))
 
-router.use(sessionLoader)
-router.use(sessionBouncer)
+authSubRouter.use(sessionLoader)
+authSubRouter.use(sessionBouncer)
 
 router.options('*', cors(corsOptions))
-router.get('/object', dataCtrlr.listObjects)
-router.post('/object', dataCtrlr.createObject)
-router.get('/object/:uid', dataCtrlr.readObject)
-router.put('/object/:uid', dataCtrlr.updateObject)
-router.delete('/object/:uid', dataCtrlr.deleteObject)
+
+authSubRouter.get('/object', dataCtrlr.listObjects)
+authSubRouter.post('/object', dataCtrlr.createObject)
+authSubRouter.get('/object/:uid', dataCtrlr.readObject)
+authSubRouter.put('/object/:uid', dataCtrlr.updateObject)
+authSubRouter.delete('/object/:uid', dataCtrlr.deleteObject)
+
+router.use(authSubRouter)
 
 module.exports = router

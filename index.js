@@ -9,8 +9,8 @@ const cspClientPort = process.env.CSP_CLIENT_PORT || 3041
 
 const corsApi = require('./api.cors.demo/app')
 const corsClient = require('./client.cors.demo/app')
-const oauthProvider = require('./provider.oauth.demo/app')
-const oauthClient = require('./client.oauth.demo/app')
+// const oauthProvider = require('./auth-server.oauth.demo/app')
+// const oauthClient = require('./client.oauth.demo/app')
 const cspServer = require('./server.csp.demo/app')
 const cspClient = require('./client.csp.demo/app')
 
@@ -22,13 +22,13 @@ corsClient.listen(corsClientPort, () =>
   console.log(`CORS demo client available on port ${corsClientPort}`)
 )
 
-oauthProvider.listen(oauthProviderPort, () =>
+/*oauthProvider.listen(oauthProviderPort, () =>
   console.log(`OAuth demo provider available on port ${oauthProviderPort}`)
 )
 
 oauthClient.listen(oauthClientPort, () =>
   console.log(`OAuth demo client available on port ${oauthClientPort}`)
-)
+)*/
 
 cspServer.listen(cspServerPort, () =>
   console.log(`CSP demo server available on port ${cspServerPort}`)
