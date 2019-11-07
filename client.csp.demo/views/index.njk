@@ -2,16 +2,18 @@
 
 {% block body %}
 Hello CSP Demonstrator! Use the options below to test injection payloads:
-<ol>
-  <li>Reflected: 
+<dl>
+  <dt>Reflected:</dt>
+  <dd> 
   <form method="POST" action="/">
     <input type="text" name="unsafeReflection" value="" /><button type="submit">Exploit</button>
   </form>
-  </li>
-  <li>DOM-based ('self' must be whitelisted as a script-src)
+  </dd>
+  <dt>DOM-based ('self' must be whitelisted as a script-src)</dt>
+  <dd>
     <input type="text" name="unsafeDom" value="" /><button id="exploitUnsafeDom">Exploit</button>
-  </li>
-</ol>
+  </dd>
+</dl>
 <div id="payload">
 {{ payload | safe }}
 </div>
