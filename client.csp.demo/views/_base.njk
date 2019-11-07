@@ -2,10 +2,20 @@
 <html>
 <head>
 <title>CSP Demonstrator{% block pageTitle %}{% endblock %}</title>
+<link rel="stylesheet" href="/bulma.min.css" />
 </head>
 <body>
-<a href="/">Home</a>&nbsp;|&nbsp;<a href="/set-csp">CSP-Setter</a>
-<hr />
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+<div class="navbar-brand is-primary">
+    <div class="navbar-item">
+      CSP Demo
+    </div>
+</div>
+<div class="navbar-start">
+  <a href="/" class="navbar-item">Home</a>
+  <a href="/set-csp" class="navbar-item">Set CSP</a>
+</nav>
+</div>
 {% block body %}{% endblock %}
 </body>
 </html>

@@ -1,21 +1,46 @@
 {% extends "_base.njk" %}
 
 {% block body %}
-Hello CSP Demonstrator! Use the options below to test injection payloads:
-<dl>
-  <dt>Reflected:</dt>
-  <dd> 
-  <form method="POST" action="/">
-    <input type="text" name="unsafeReflection" value="" /><button type="submit">Exploit</button>
-  </form>
-  </dd>
-  <dt>DOM-based ('self' must be whitelisted as a script-src)</dt>
-  <dd>
-    <input type="text" name="unsafeDom" value="" /><button id="exploitUnsafeDom">Exploit</button>
-  </dd>
-</dl>
-<div id="payload">
-{{ payload | safe }}
-</div>
+<section class="hero is-info is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Hello CSP Demonstrator!
+      </h1>
+      <h2 class="subtitle">
+        Use the options below to test injection payloads.
+      </h2>
+     </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <form method="POST" action="/">
+      <label class="label">Reflected</label>
+      <div class="field has-addons">
+        <div class="control"><input class="input is-danger" type="text" name="unsafeReflection" value="" /></div>
+        <div class="control"><button class="button is-danger" type="submit">Exploit</button></div>
+      </div>
+    </form>
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <label class="label">DOM-based</label>
+    <label class="label is-small">'self' must be whitelisted as a script-src</label>
+    <div class="field has-addons">
+      <div class="control"><input class="input is-danger" type="text" name="unsafeDom" value="" /></div>
+      <div class="control"><button class="button is-danger" id="exploitUnsafeDom">Exploit</button></div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container is-warn">
+  <label class="label">Payload output is here:</label>
+    <div id="payload">
+    {{ payload | safe }}
+    </div>
+  </div>
+</section>
 <script src="/main.js"></script>
 {% endblock %}
