@@ -13,6 +13,7 @@
     "express-oauth-server": "^2.0.0",
     "lokijs": "^1.5.5",
     "nodemon": "^1.18.4",
+    "nunjucks": "^3.2.0",
     "uuid": "^3.3.2"
   },
   "scripts": {

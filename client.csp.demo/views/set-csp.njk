@@ -1,0 +1,19 @@
+{% extends "_base.njk" %}
+
+{% block pageTitle %} - Set the CSP{% endblock %}
+
+{% block body %}
+Set your CSP below.
+
+<form method="POST" action="/set-csp">
+
+<ul style="list-style-type:none">
+  {% for directive in allDirectives %}
+    <li><input name="use-{{ directive }}" type="checkbox"{% if currDirectives[directive] %}checked="checked"{% endif %} />{{ directive }}<input name="{{ directive }}" type="text" value="{% if currDirectives[directive] %}{{currDirectives[directive]}}{% endif %}"></li>
+  {% endfor %}
+</ul>
+<button type="submit">Submit</button>
+<div>{{ msg }}</div>
+</form>
+
+{% endblock %}
