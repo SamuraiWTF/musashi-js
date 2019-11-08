@@ -1,0 +1,47 @@
+{% extends "_base.njk" %}
+
+{% block pageTitle %} - Exercise 1{% endblock %}
+
+{% block body %}
+<div class="hero is-warning">
+<h1 class="title">Exercise 1</h1>
+<h2 class="subtitle">
+{% if isSuccess %}
+  Congratulations on solving this exercise!
+{% elif cspIsSet %}
+  The CSP is set.
+{% else %}
+    Looks like the CSP isn't set for this exercise.
+    <form method="POST" action="/set-csp">
+      <input type="hidden" name="ex" value="1" />
+      <input type="hidden" name="use-default-src" value="on" />
+      <input type="hidden" name="default-src" value="'self'" />
+      <button class="button is-danger" type="submit">(re)set</button>
+    </form>
+{% endif %}
+</h2>
+</div>
+<section class="section is-small is-light">
+This one shouldn't require any customization of the CSP. See if you can redirect this login to <code>/ex/1/exploited</code>.
+
+<!-- The target scope is below this point -->
+
+  <div class="card">
+    <div class="card-content">
+      <p class="title is-4">Login</p>
+      <form action="/ex/1" method="POST">
+        <input type="hidden" name="redirectTo" value="{{ redir | safe }}">
+        <label class="label">Username</label>
+          <div class="field">
+            <div class="control"><input class="input" type="text" name="username" value="" /></div>
+          </div>
+          <label class="label">Password</label>
+          <div class="field">
+            <div class="control"><input class="input" type="password" name="password" value="" /></div>
+          </div>
+          <input type="submit" class="button is-dark" value="Login" /> {% if isPost %}<p>Congratulations, you logged in.</p>{% endif %}
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

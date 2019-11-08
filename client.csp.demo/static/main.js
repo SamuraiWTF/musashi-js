@@ -4,7 +4,6 @@ if(unsafeDomBtn) {
   unsafeDomBtn.onclick = ((textbox) => {
     let payload = document.getElementById('payload');
     return (event) => {
-      alert('done');
       payload.innerHTML = textbox.value;
     }
   })(input)
