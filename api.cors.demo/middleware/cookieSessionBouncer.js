@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-  if (!req.session) {
+  if (!req.session && !req.method === 'OPTIONS') {
     res.setHeader('Content-Type', 'application/json')
     res
       .status(401)
