@@ -3,7 +3,10 @@
 
 Musashi.js is a set of Node applications for demonstrating web security concepts. Created for use in Samurai WTF.
 
-***Only the CORS Demonstrator is ready for general use at this time, the other parts are still under development***
+## Status of the Applications
+ - CORS Demonstrator - Ready for general use
+ - CSP Demonstrator - Beta
+ - OAuth Demonstrator - Not ready for use, WIP
 
 ## Starting the services
 You need Node and Yarn installed an in the path.
