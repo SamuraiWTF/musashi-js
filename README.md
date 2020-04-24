@@ -14,7 +14,7 @@ You need Node and Yarn installed an in the path.
  2. `yarn install`
  3. `yarn start`
 
-Console output will discribe which servers are listening on which ports. To override these, add a `.env` file with your own port specifications. The [sample.env](sample.env) file is available as a reference.
+Console output will describe which servers are listening on which ports. To override these, add a `.env` file with your own port specifications. The [sample.env](sample.env) file is available as a reference.
 
 ## CORS Demonstrator
 ### Usage
