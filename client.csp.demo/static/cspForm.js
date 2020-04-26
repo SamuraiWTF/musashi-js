@@ -2,9 +2,6 @@ setTimeout(function() { document.getElementById('msg').innerHTML = ''}, 2500);
 
 function createTexboxBlurHandler(checkbox) {
   return function (event) {
-    console.log('event fired')
-    console.log(event.target)
-    console.log(event.target.value)
     if(event.target.value.trim().length === 0) {
       checkbox.checked = ''
     } else {

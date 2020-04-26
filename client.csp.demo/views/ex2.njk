@@ -1,0 +1,49 @@
+{% extends "_base.njk" %}
+
+{% block pageTitle %} - Exercise 2{% endblock %}
+
+{% block body %}
+<div class="hero is-warning">
+<h1 class="title">Exercise 2</h1>
+<h2 class="subtitle">
+{% if cspIsSet %}
+  <span id="topMessage">The CSP is set.</span>
+{% else %}
+    Looks like the CSP isn't set for this exercise.
+    <form method="POST" action="/set-csp">
+      <input type="hidden" name="ex" value="2" />
+      <input type="hidden" name="use-default-src" value="on" />
+      <input type="hidden" name="default-src" value="'self'" />
+      <input type="hidden" name="script-src" value="'self' cdn.jsdelivr.net" />
+      <input type="hidden" name="use-script-src" value="on" />
+      <button class="button is-danger" type="submit">(re)set</button>
+    </form>
+{% endif %}
+</h2>
+</div>
+<section class="section is-small is-light">
+<p>This exercise is a test of finding the flaw in the CSP. Execute a JavaScript <code>alert</code> pop-up to prove you have execution.</p>
+<p>Note: This one requires access to the internet.</p>
+
+
+<!-- The target scope is below this point -->
+
+  <div class="card">
+    <div class="card-content">
+      <p class="title is-4">Forgot My Password</p>
+      <form action="/ex/2" method="POST">
+        <label class="label">Email</label>
+          <div class="field">
+            <div class="control"><input class="input" type="text" name="email" value="{{ emailAddr | safe }}" /></div>
+          </div>
+          <input type="submit" class="button is-dark" value="Submit" />
+          {% if message %}
+            <p>{{ message }}</p>
+          {% endif %}
+      </form>
+    </div>
+  </div>
+</section>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+  <script src="/alertsolve.js"></script>
+{% endblock %}
