@@ -3,6 +3,7 @@ const nunjucks = require('nunjucks')
 const cookieParser = require('cookie-parser')
 const exerciseRoutes = require('./routes/exercise')
 const resHeaders = require('./middleware/responseHeaders')
+const generateNonce = require('./middleware/generateNonce')
 
 const app = express()
 const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('client.csp.demo/views'))
@@ -24,7 +25,7 @@ global.cspDirectives = { 'default-src': `'self'`, 'use-default-src': 'on' }
 
 const globalCsp = (req, res, next) => {
   if(global.csp.trim().length > 0) {
-    res.set('Content-Security-Policy', global.csp)
+    res.set('Content-Security-Policy', global.csp.replace(/\$nonce/g, res.nonce))
   }
   next()
 }
@@ -40,8 +41,8 @@ const constructCSP = ((supportedDirectives)=>{
   }
 })(supportedDirectives)
 
-app.get('/', globalCsp, (req, res) => res.render('index'))
-app.post('/', express.urlencoded(), globalCsp, (req, res) => res.render('index', { payload: req.body.unsafeReflection }))
+app.get('/', generateNonce, globalCsp, (req, res) => res.render('index', { nonce: res.nonce }))
+app.post('/', express.urlencoded(), generateNonce, globalCsp, (req, res) => res.render('index', { payload: req.body.unsafeReflection, nonce: res.nonce }))
 app.get('/set-csp', (req, res) => res.render('set-csp', { msg: req.query.msg, allDirectives: supportedDirectives, currDirectives: cspDirectives }))
 app.post('/set-csp', express.urlencoded(), (req, res) => {
   csp = constructCSP(req.body)
