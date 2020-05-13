@@ -26,6 +26,7 @@ global.cspDirectives = { 'default-src': `'self'`, 'use-default-src': 'on' }
 const globalCsp = (req, res, next) => {
   if(global.csp.trim().length > 0) {
     res.set('Content-Security-Policy', global.csp.replace(/\$nonce/g, res.nonce))
+    res.set('Content-Security-Policy-Report-Only', 'report-uri /csp-report; ' + global.csp.replace(/\$nonce/g, res.nonce))
   }
   next()
 }
