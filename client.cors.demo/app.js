@@ -1,6 +1,16 @@
 const express = require('express')
-const client = express()
+const nunjucks = require('nunjucks')
 
-client.use(express.static('client.cors.demo/static'))
+const app = express()
+const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('client.cors.demo/views'))
 
-module.exports = client
+jucksEnv.express(app)
+app.set('view engine', 'njk')
+
+app.use(express.static('client.cors.demo/static'))
+
+app.get('/', (req, res) => {
+    res.render('index')
+})
+
+module.exports = app
