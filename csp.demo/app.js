@@ -6,7 +6,7 @@ const resHeaders = require('./middleware/responseHeaders')
 const generateNonce = require('./middleware/generateNonce')
 
 const app = express()
-const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('client.csp.demo/views'))
+const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('csp.demo/views'))
 const supportedDirectives = ['default-src', 'script-src', 'style-src', 'img-src', 'connect-src', 'font-src', 'object-src', 'media-src', 'child-src', 'frame-ancestors', 'form-action', 'base-uri']
 
 
@@ -18,7 +18,7 @@ app.use(resHeaders({
   'Cache-Control': 'no-cache',
 }))
 
-app.use(express.static('client.csp.demo/static'))
+app.use(express.static('csp.demo/static'))
 
 global.csp = `default-src 'self'`
 global.cspDirectives = { 'default-src': `'self'`, 'use-default-src': 'on' }
