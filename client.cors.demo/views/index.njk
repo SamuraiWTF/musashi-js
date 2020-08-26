@@ -1,18 +1,11 @@
-<!DOCTYPE html>
-<html>
+{% extends "_base.njk" %}
 
-<head>
-  <title>CORS Demo</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="/css/bulma.min.css" />
-</head>
-
-<body>
+{% block body %}
   <section class="hero is-dark is-bold">
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          CORS
+          Musashi.js - CORS
         </h1>
         <h2 class="subtitle">
           Cross-Origin Resource Sharing - Demonstation
@@ -27,12 +20,12 @@
           <div class="level-item">
             <div class="field is-horizontal">
               <div class="field-label is-normal">
-                <label class="label">{{ protocol }}://</label>
+                <label class="label">API</label>
               </div>
               <div class="field-body">
                 <div class="field">
                   <p class="control">
-                    <input class="input is-rounded is-normal" id="apiUrlTextbox" type="text" data-tippy="For repointing the API hostname." data-tippy-arrow="true" data-tippy-distance="15"  placeholder="API Host/Port">
+                    <input class="input is-rounded is-normal" readonly value="{{ protocol }}://{{ apiHost }}" id="apiUrlTextbox" type="text" data-tippy="Target API hostname. Can be modified in the Settings." data-tippy-arrow="true" data-tippy-distance="15"  placeholder="API Host/Port">
                   </p>
                 </div>
               </div>
@@ -45,7 +38,7 @@
               <ul>
                 <li class="is-active" id="corsTab_sop" name="corsTabs">
                   <a data-tippy="No CORS Policy at all. SOP will be enforced." data-tippy-arrow="true" data-tippy-distance="30">
-                    <span>Same-Origin</span>
+                    <span>No CORS</span>
                   </a>
                 </li>
                 <li id="corsTab_reflected" name="corsTabs">
@@ -203,12 +196,9 @@
     }
   })();
   let _apiUrl = (function() {
-    let textbox = document.getElementById('apiUrlTextbox');
-    let currentApiUrl = '{{ apiHost }}';
-    textbox.value = currentApiUrl;
+    let currentApiUrl = `{{ protocol | escbt }}://{{ apiHost | escbt }}`;
     return {
       set: function(val) {
-        textbox.value = val;
         currentApiUrl = val;
       },
       get: function() {
@@ -238,7 +228,7 @@
 
       let req = new XMLHttpRequest();
       req.addEventListener("load", updateResponseBox);
-      req.open('POST', `{{ protocol }}:\\\\${_apiUrl.get()}\\auth\\login`);
+      req.open('POST', `${_apiUrl.get()}\\auth\\login`);
       req.withCredentials = true;
       req.send(JSON.stringify(body));
     },
@@ -246,7 +236,7 @@
       let req = new XMLHttpRequest();
       req.addEventListener("load", updateResponseBox);
       req.addEventListener("error", showRequestError);
-      req.open('GET', `{{ protocol }}:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object?ts=${Date.now()}`);
+      req.open('GET', `${_apiUrl.get()}\\${_corsPolicy.get()}\\object?ts=${Date.now()}`);
       req.withCredentials = true;
       req.send();
     },
@@ -254,7 +244,7 @@
       let payload = JSON.stringify(JSON.parse(document.getElementById('insertObjectJson').value));
       let req = new XMLHttpRequest();
       req.addEventListener("load", updateResponseBox);
-      req.open('POST', `{{ protocol }}:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object`);
+      req.open('POST', `${_apiUrl.get()}\\${_corsPolicy.get()}\\object`);
       req.withCredentials = true;
       req.send(payload);
     },
@@ -262,7 +252,7 @@
       let req = new XMLHttpRequest();
       let uid = document.getElementById('getObjectUid').value;
       req.addEventListener("load", updateResponseBox);
-      req.open('GET', `{{ protocol }}:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}?ts=${Date.now()}`);
+      req.open('GET', `${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}?ts=${Date.now()}`);
       req.withCredentials = true;
       req.send();
     },
@@ -271,7 +261,7 @@
       let payload = JSON.stringify(JSON.parse(document.getElementById('updateObjectJson').value));
       let uid = document.getElementById('updateObjectUid').value;
       req.addEventListener("load", updateResponseBox);
-      req.open('PUT', `{{ protocol }}:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}`);
+      req.open('PUT', `${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}`);
       req.withCredentials = true;
       req.send(payload);
     },
@@ -279,7 +269,7 @@
       let req = new XMLHttpRequest();
       let uid = document.getElementById('deleteObjectUid').value;
       req.addEventListener("load", updateResponseBox);
-      req.open('DELETE', `{{ protocol }}:\\\\${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}`);
+      req.open('DELETE', `${_apiUrl.get()}\\${_corsPolicy.get()}\\object\\${uid}`);
       req.withCredentials = true;
       req.send();
     }
@@ -292,11 +282,6 @@
     let corsTabReflected = document.getElementById('corsTab_reflected');
 
     let tabGroup = document.getElementsByName('corsTabs');
-
-    document.getElementById('apiUrlTextbox').addEventListener('blur', (event) => {
-        _apiUrl.set(event.target.value);
-        alert(`Updated API server to ${event.target.value}`);
-    });
 
     corsTabRegex.addEventListener('click', (function(tab, group) {
         return function() {
@@ -328,13 +313,12 @@
         }
     })(corsTabReflected, tabGroup));
 
-    if(document.location.search.length > 1) {
-      let queryString = document.location.search.substring(1).split('&').reduce((ars, ar) => { let ar1 = ar.split('='); ars[ar1[0]] = ar1[1]; return ars}, {});
-      if(queryString.apiUrl) {
-        _apiUrl.set(queryString.apiUrl);
-      }
+    let sessionApiUrl = sessionStorage.getItem('apiHost');
+    if (sessionApiUrl !== null) {
+        _apiUrl.set(sessionApiUrl);
+        document.getElementById('apiUrlTextbox').value = sessionApiUrl;
     }
+
   });
   </script>
-</body>
-</html>
+{% endblock %}

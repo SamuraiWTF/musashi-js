@@ -1,0 +1,84 @@
+{% extends "_base.njk" %}
+
+{% block body %}
+
+<section class="hero is-dark is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+            Musashi.js - CORS
+            </h1>
+            <h2 class="subtitle">
+            Settings
+            </h2>
+        </div>
+    </div>
+</section>
+<section class="section has-background-light">
+    <nav class="level">
+    <div class="level-left">
+        <div class="level-item">
+        
+                <form>
+                <div class="field">
+                    <label class="label">API Host</label>
+                    <div class="control has-icons-left has-icons-right">
+                    <input id="apiHostTextbox" class="input" type="text" placeholder="http://127.0.0.1" />
+                    <span class="icon is-small is-right is-hidden">
+                        <i class="fas fa-check"></i>
+                    </span>
+                    </div>
+                    <p class="help is-hidden is-success"></p>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link" onclick="updateHost()">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-info is-light" onclick="resetHost()">Reset</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger" onclick="setHostToDefault()">Default</button>
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+    </nav>
+</section>
+
+<script>
+    let apiHostInput = document.getElementById('apiHostTextbox');
+
+    const updateHost = (function(hostInput) {
+        return () => {
+          if(hostInput.value.toLowerCase() === `{{ protocol | escbt }}://{{ apiHost | escbt }}`) {
+              setHostToDefault();
+          } else {
+            sessionStorage.setItem('apiHost', hostInput.value);
+          }
+        }
+    })(apiHostInput);
+
+    const setHostToDefault = (function(hostInput) {
+        return () => {
+          sessionStorage.removeItem('apiHost');
+          hostInput.value = `{{ protocol | escbt }}://{{ apiHost | escbt }}`;
+        }
+    })(apiHostInput);
+
+
+    const resetHost = (function(hostInput) {  
+      return () => {
+        let sessionHost = sessionStorage.getItem('apiHost'); 
+        hostInput.value = sessionHost || `{{ protocol | escbt }}://{{ apiHost | escbt }}`;
+      }
+    })(apiHostInput);
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        resetHost();
+        document.getElementsByTagName('form')[0].onsubmit = (e) => { e.preventDefault() };
+    });
+</script>
+
+{% endblock %}
