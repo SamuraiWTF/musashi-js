@@ -1,0 +1,15 @@
+{% extends "exercises/_ex.njk" %}
+
+{% block scenario %}
+This API endpoint is using a regular expression to limit the calls to only those from the origin of {{ corsClientHost }}, and subdomains.
+However, there's a flaw in the implementation of this pattern. 
+{% endblock %}
+
+{% block goal %}
+Find an origin is allowed by the <code>Access-Control-Allow-Origin</code> response header, even though it doesn't belong to this domain.
+{% endblock %}
+
+{% block solution %}
+Any origin ending in <i>{{ corsClientHost }}</i> is allowed, even <b>https://evil{{ corsClientHost }}</b>. 
+To fix this, the pattern should require a dot or period <code>.</code> character before the domain or hostname, unless it is immediately preceded by the protocol.  
+{% endblock %}

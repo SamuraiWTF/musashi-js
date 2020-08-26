@@ -1,0 +1,82 @@
+{% extends "_base.njk" %}
+
+{% block pageTitle %} - Ex{{ exnum }}{% endblock %}
+
+{% block body %}
+
+  <section class="hero is-link is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Musashi.js - CORS
+        </h1>
+        <h2 class="subtitle">
+          Exercise {{ exnum }}
+        </h2>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section has-background-light">
+    <div class="container">
+    {% block instructions %}
+These exercises are performed by tampering with the request in your interception proxy (e.g. Burp or ZAP). Be sure to read the scenario description before for critical
+details, including the setup information for your starting point, and possible hints. Also, make note of the goal, as not every exercise has the same success criteria.
+    {% endblock %}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="subtitle">
+      Scenario
+      </h2>
+      <p>{% block scenario %}{% endblock %}</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="subtitle">
+      Goal
+      </h2>
+      <p>{% block goal %}{% endblock %}</p>
+      <div class="field">
+        <div class="control">
+          <button class="button is-info is-rounded" onclick="sendSampleRequest(`{{ protocol | escbt }}://{{ apiHost | escbt }}/ex/{{ exnum | escbt }}`);alert('Sample request has been sent.');">Send Request</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+    {% if showSolution %}
+    <section class="hero is-warning">
+      <div class="container">
+        <h2 class="subtitle">Solution</h2>
+        <p>{% block solution %}{% endblock %}</p>
+      </div>
+    </section>
+    {% else %}
+    <section class="section">
+        <form class="container" method="POST" action="/ex/{{ exnum }}">
+            <div class="field">
+              <div class="control">
+                <button class="button is-danger is-rounded" type="submit">Show Solution</button>
+              </div>
+            </div>
+        </form>
+      </section>
+    {% endif %}
+  </section>
+
+  {% block sampleFunction %}
+    <script>
+        function sendSampleRequest(targetUrl) {
+            fetch(targetUrl);
+        }
+    </script>
+  {% endblock %}
+
+
+{% endblock %}

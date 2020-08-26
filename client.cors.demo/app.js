@@ -25,6 +25,14 @@ app.get('/settings', (req, res) => {
     res.render('settings', { apiHost: apiHost, protocol: protocol })
 })
 
+app.get('/ex/:exnum', (req, res) => {
+  res.render(`exercises/ex${req.params.exnum}`, { apiHost: apiHost, protocol: protocol, exnum: req.params.exnum, showSolution: false })  
+})
+
+app.post('/ex/:exnum', (req, res) => {
+  res.render(`exercises/ex${req.params.exnum}`, { apiHost: apiHost, protocol: protocol, exnum: req.params.exnum, corsClientHost: process.env.CORS_CLIENT_HOST, showSolution: true })  
+})
+
 module.exports = app
 
 function stringToBool(str) {
