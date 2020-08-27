@@ -1,7 +1,7 @@
 {% extends "exercises/_ex.njk" %}
 
 {% block scenario %}
-This API endpoint is using a regular expression to limit the calls to only those from the origin of {{ corsClientHost }}, and subdomains.
+This API endpoint is using a regular expression to limit the calls to only those from the origin of <i>{{ corsClientHost }}</i>, and subdomains such as <i>staging.{{ corsClientHost }}</i>.
 However, there's a flaw in the implementation of this pattern. 
 {% endblock %}
 

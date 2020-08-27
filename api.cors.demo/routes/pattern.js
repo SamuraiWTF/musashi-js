@@ -13,7 +13,7 @@ function escapeRegex(string) {
 }
 
 const corsOptions = {
-  origin: new RegExp(escapeRegex(process.env.CORS_CLIENT_HOST) + '$'),
+  origin: new RegExp('https?:\\/\\/([0-9a-z\\.\\-]+\\.)?' + escapeRegex(process.env.CORS_CLIENT_HOST) + '$'),
   methods: 'GET,POST,PUT,DELETE',
   credentials: true
 }
