@@ -11,5 +11,6 @@ api.use('/auth', require('./routes/auth'))
 api.use('/sop', require('./routes/sop'))
 api.use('/pattern', require('.//routes/pattern'))
 api.use('/reflect', require('./routes/reflect'))
+api.use('/ex', require('./routes/ex'))
 
 module.exports = api

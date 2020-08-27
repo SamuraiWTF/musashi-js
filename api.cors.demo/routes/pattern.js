@@ -8,11 +8,16 @@ const sessionBouncer = require('../middleware/cookieSessionBouncer')
 
 const dataCtrlr = require('../controllers/data')
 
+function escapeRegex(string) {
+  return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
 const corsOptions = {
-  origin: /cors\.dem$/,
+  origin: new RegExp('https?:\\/\\/([0-9a-z\\.\\-]+\\.)?' + escapeRegex(process.env.CORS_CLIENT_HOST) + '$'),
   methods: 'GET,POST,PUT,DELETE',
   credentials: true
 }
+console.log('corsOptions:', corsOptions);
 router.use(cors(corsOptions))
 
 authSubRouter.use(sessionLoader)

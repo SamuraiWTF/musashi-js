@@ -1,0 +1,14 @@
+{% extends "exercises/_ex.njk" %}
+
+{% block scenario %}
+A regular expression is used to limit the allowed origins to just <i>professionallyevil.com</i>, <i>www.professionallyevil.com</i>, and <i>blog.professionallyevil.com</i>.
+There is a flaw in this regular expression.
+{% endblock %}
+
+{% block goal %}
+Find an origin is allowed by the <code>Access-Control-Allow-Origin</code> response header, even though it doesn't belong to this domain.
+{% endblock %}
+
+{% block solution %}
+This regular expression is missing the end anchor <code>$</code>, so any origin <u>starting</u> with an allowed domain will work, including <b>https://professionallyevil.com.{{ corsClientHost }}</b>.
+{% endblock %}

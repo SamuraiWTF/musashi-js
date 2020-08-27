@@ -1,6 +1,48 @@
 const express = require('express')
-const client = express()
+const nunjucks = require('nunjucks')
 
-client.use(express.static('client.cors.demo/static'))
+const app = express()
+const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('client.cors.demo/views'))
 
-module.exports = client
+const apiHost = process.env.CORS_API_HOST || 'api.cors.dem';
+const protocol = stringToBool(process.env.USE_TLS) ? 'https' : 'http';
+
+// Escape backticks - for dumping variables into template literals on the front-end.
+jucksEnv.addFilter("escbt", (str) => {
+  return str.replace(/`/g, '\\`');
+});
+
+jucksEnv.express(app)
+app.set('view engine', 'njk')
+
+app.use(express.static('client.cors.demo/static'))
+
+app.get('/', (req, res) => {
+    res.render('index', { apiHost: apiHost, protocol: protocol })
+})
+
+app.get('/settings', (req, res) => {
+    res.render('settings', { apiHost: apiHost, protocol: protocol })
+})
+
+app.get('/ex/:exnum', (req, res) => {
+  res.render(`exercises/ex${req.params.exnum}`, { apiHost: apiHost, protocol: protocol, exnum: req.params.exnum, showSolution: false })  
+})
+
+app.post('/ex/:exnum', (req, res) => {
+  res.render(`exercises/ex${req.params.exnum}`, { apiHost: apiHost, protocol: protocol, exnum: req.params.exnum, corsClientHost: process.env.CORS_CLIENT_HOST, showSolution: true })  
+})
+
+module.exports = app
+
+function stringToBool(str) {
+    let test = str.toUpperCase().trim();
+    if(["TRUE","Y","YES","1"].indexOf(test) > -1) {
+      return true
+    } else if (["FALSE","N","NO","0"].indexOf(test) > -1) {
+      return false
+    } else {
+      console.error(`Invalid value in stringToBool: ${str}`)
+      return undefined
+    }
+  }
