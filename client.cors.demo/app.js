@@ -26,7 +26,7 @@ app.get('/settings', (req, res) => {
 })
 
 app.get('/ex/:exnum', (req, res) => {
-  res.render(`exercises/ex${req.params.exnum}`, { apiHost: apiHost, protocol: protocol, exnum: req.params.exnum, showSolution: false })  
+  res.render(`exercises/ex${req.params.exnum}`, { apiHost: apiHost, protocol: protocol, exnum: req.params.exnum, corsClientHost: process.env.CORS_CLIENT_HOST, showSolution: false })  
 })
 
 app.post('/ex/:exnum', (req, res) => {
