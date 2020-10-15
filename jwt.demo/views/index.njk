@@ -1,0 +1,72 @@
+{% extends "_base.njk" %}
+
+{% block body %}
+  <section class="hero is-warning is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Musashi.js - JWT
+        </h1>
+        <h2 class="subtitle">
+          JSON Web Tokens - Demonstation
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section class="section has-background-light">
+    <div class="container">
+    <div class="tile is-ancestor">
+      <div class="tile is-8">
+        <div class="tile is-child box">
+          <p class="subtitle">Token</p><!--eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.
+yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
+          <div id="tokenBox" style="max-width:705px;word-wrap: break; overflow: auto;" contenteditable="true">Paste JWT Here</div>
+        </div>
+      </div>
+    </div>
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="tile is-child box">
+           <p class="subtitle">Header</p>
+           <textarea id="jwtHeaderSegment" class="textarea is-success" placeholder='{ "typ":"jwt", "alg":"hs256"}'></textarea>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile is-child box">
+           <p class="subtitle">Payload</p>
+           <textarea id="jwtBodySegment" class="textarea is-danger" placeholder="e.g. Hello world"></textarea>
+        </div>
+      </div>
+      <div class="tile">
+        <div class="tile is-child box">
+           <p class="subtitle">Signature</p>
+           <textarea id="jwtSigSegment" class="textarea is-info" placeholder="e.g. Hello world"></textarea>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+  <script>
+    const segmentColors = ['#23d160','#ff3860','#209cee', '#000000'];
+
+    //dirty side-effect function
+    function showInBox(section, index) {
+        const targetElement = ['jwtHeaderSegment', 'jwtBodySegment', 'jwtSigSegment'];
+        if(index <= targetElement.length - 1) {
+            document.getElementById(targetElement[index]).value = index <= 1 ? atob(section) : section;
+        }
+        return section;
+        //otherwise do nothing. 
+    }
+
+    function colorize(section, index) {
+        return `<p style="color:${segmentColors[index < 3 ? index : 3]}">${section}</p>`;
+    }
+
+    document.getElementById('tokenBox').addEventListener("keyup",(e) => {
+        e.target.innerHTML = e.target.innerText.replace(/\s/gm, '').split('.').map(showInBox).map(colorize).join('.');
+        e.target.scrollTo(0,0);
+    });
+  </script>
+{% endblock %}

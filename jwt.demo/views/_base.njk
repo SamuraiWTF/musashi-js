@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JWT Demonstrator{% block pageTitle %}{% endblock %}</title>
+<link rel="stylesheet" href="/css/bulma.min.css" />
+</head>
+<body>
+<nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+<div class="navbar-brand is-primary">
+    <div class="navbar-item">
+      JWT Demo
+    </div>
+</div>
+<div class="navbar-start">
+  <a href="/" class="navbar-item">Tamper</a>
+  <div class="navbar-item has-dropdown is-hoverable">
+    <a class="navbar-link">Exercises</a>
+     <div class="navbar-dropdown">
+          <a class="navbar-item" href="/ex/1">
+            Exercise 1
+          </a>
+          <a class="navbar-item" href="/ex/2">
+            Exercise 2
+          </a>
+  </div>
+  </div>
+  <div class="navbar-end">
+    <a href="/settings" class="navbar-item hidden">Settings</a>
+  </div>
+</nav>
+{% block body %}{% endblock %}
+  <script defer src="/js/fa.all.min.js"></script>
+</body>
+</html>

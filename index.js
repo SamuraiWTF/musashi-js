@@ -5,12 +5,14 @@ const corsClientPort = process.env.CORS_CLIENT_PORT || 3021
 const oauthProviderPort = process.env.OAUTH_PROVIDER_PORT || 3030
 const oauthClientPort = process.env.OAUTH_CLIENT_PORT || 3031
 const cspAppPort = process.env.CSP_APP_PORT || 3041
+const jwtPort = process.env.JWT_PORT || 3050
 
 const corsApi = require('./api.cors.demo/app')
 const corsClient = require('./client.cors.demo/app')
 // const oauthProvider = require('./auth-server.oauth.demo/app')
 // const oauthClient = require('./client.oauth.demo/app')
 const cspClient = require('./csp.demo/app')
+const jwt = require('./jwt.demo/app')
 
 corsApi.listen(corsApiPort, () =>
   console.log(`CORS demo API server listening on port ${corsApiPort}`)
@@ -30,4 +32,8 @@ oauthClient.listen(oauthClientPort, () =>
 
 cspClient.listen(cspAppPort, () =>
   console.log(`CSP demo app available on port ${cspAppPort}`)
+)
+
+jwt.listen(jwtPort, () => 
+  console.log(`JWT demo app available on port ${jwtPort}`)
 )
