@@ -16,12 +16,12 @@
   <section class="section has-background-light">
     <div class="container">
     <div class="tile is-ancestor">
-      <div class="tile is-8">
-        <div class="tile is-child box">
+      <div class="tile is-12">
+        <div class="tile is-child box" style="overflow:auto">
           <p class="subtitle">Token</p><!--eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.
 yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
-          <div id="tokenBox" style="max-width:705px;word-wrap: break; overflow: auto;" contenteditable="true">Paste JWT Here</div>
+          <div id="tokenBox" style="word-wrap: break; overflow: auto;" contenteditable="true"><span id="placeholder">Paste a JWT here.</span></div>
         </div>
       </div>
     </div>
@@ -35,13 +35,13 @@ yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
       <div class="tile">
         <div class="tile is-child box">
            <p class="subtitle">Payload</p>
-           <textarea id="jwtBodySegment" class="textarea is-danger" placeholder="e.g. Hello world"></textarea>
+           <textarea id="jwtBodySegment" class="textarea is-danger" placeholder='{"iss":"auth.musashi.local","exp":1426420800,"is_admin":true,"company":"Example Company"}'></textarea>
         </div>
       </div>
       <div class="tile">
         <div class="tile is-child box">
            <p class="subtitle">Signature</p>
-           <textarea id="jwtSigSegment" class="textarea is-info" placeholder="e.g. Hello world"></textarea>
+           <textarea id="jwtSigSegment" class="textarea is-info" placeholder="yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw"></textarea>
         </div>
       </div>
     </div>
