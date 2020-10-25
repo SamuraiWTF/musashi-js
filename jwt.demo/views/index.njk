@@ -21,7 +21,7 @@
           <p class="subtitle">Token</p><!--eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.
 yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
-          <div id="tokenBox" style="word-wrap: break; overflow: auto;" contenteditable="true"><span id="placeholder">Paste a JWT here.</span></div>
+          <div id="tokenBox" style="word-wrap: break; overflow: auto;" contenteditable="true"><span class="placeholder">Paste a JWT here.</span></div>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@ yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
       <div class="tile">
         <div class="tile is-child box">
            <p class="subtitle">Signature</p>
-           <textarea id="jwtSigSegment" class="textarea is-info" placeholder="yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw"></textarea>
+           <textarea id="jwtSigSegment" class="textarea is-info" placeholder="yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw" readonly></textarea>
         </div>
       </div>
     </div>
@@ -64,9 +64,32 @@ yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
         return `<p style="color:${segmentColors[index < 3 ? index : 3]}">${section}</p>`;
     }
 
+
+//TODO Throttle
+    function tokenBoxModified(box) {
+        box.innerHTML = box.innerText.replace(/\s/gm, '').split('.').map(showInBox).map(colorize).join('.');
+        box.scrollTo(0,0);
+    }
+
+document.getElementById('tokenBox').addEventListener("focus", (e) => {
+  if(e.target.getElementsByClassName('placeholder').length > 0) {
+    e.target.innerHTML = '';
+  }
+});
+
+document.getElementById('tokenBox').addEventListener("blur", (e) => {
+  if(e.target.innerText.trim().length === 0) {
+        e.target.innerHTML = '<span class="placeholder">Paste a JWT here.</span>';
+  }
+});
+
+//TODO Make conditional
     document.getElementById('tokenBox').addEventListener("keyup",(e) => {
-        e.target.innerHTML = e.target.innerText.replace(/\s/gm, '').split('.').map(showInBox).map(colorize).join('.');
-        e.target.scrollTo(0,0);
+        tokenBoxModified(e.target);
     });
+    document.getElementById('tokenBox').addEventListener("paste", (e) => {
+      console.log(e);
+        tokenBoxModified(e.target);
+    })
   </script>
 {% endblock %}
