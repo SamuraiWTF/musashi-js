@@ -8,6 +8,7 @@ Musashi.js is a set of Node applications for demonstrating web security concepts
  - CSP Demonstrator
 
  ## Unusable Applications (Work-in-Progress or Roadmap)
+ - JWT Demo
  - OAuth Demonstrator
  - Sandbox for CSRF, CORS, XSS exercises
  - Help page
