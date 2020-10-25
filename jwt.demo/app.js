@@ -16,7 +16,7 @@ jucksEnv.addFilter("escbt", (str) => {
 jucksEnv.express(app)
 app.set('view engine', 'njk')
 
-app.use(express.static('client.cors.demo/static'))
+app.use(express.static('jwt.demo/static'))
 
 app.get('/', (req, res) => {
     res.render('index', { apiHost: host, protocol: protocol })

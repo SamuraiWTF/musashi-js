@@ -15,16 +15,33 @@
   </section>
   <section class="section has-background-light">
     <div class="container">
+    {#Token Box Input #}
     <div class="tile is-ancestor">
       <div class="tile is-12">
         <div class="tile is-child box" style="overflow:auto">
-          <p class="subtitle">Token</p><!--eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+          <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <p class="subtitle">Original Token</p>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <span id="repopulateButton" class="icon clickable" data-tippy="Repopulate the Header, Payload, and Signature boxes from the Original Token." data-tippy-arrow="true" data-tippy-distance="30">
+                  <i class="fas fa-redo-alt"></i>
+                </span>
+              </div>
+            </div>
+          </nav>
+{# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.
-yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
+yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw  -- sample for testing #}
           <div id="tokenBox" class="input" contenteditable="true"><span class="placeholder">Paste a JWT here.</span></div>
+        
         </div>
       </div>
     </div>
+    {#Segments#}
     <div class="tile is-ancestor">
       <div class="tile">
         <div class="tile is-child box">
@@ -40,63 +57,163 @@ yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
       </div>
       <div class="tile">
         <div class="tile is-child box">
-           <p class="subtitle">Signature</p>
+           <nav class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <p class="subtitle">Signature</p>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+               <div class="tabs is-small is-toggle is-toggle-rounded">
+                <ul>
+                  <li class="is-active" id="sigTab_copy" name="sigTabs">
+                    <a>
+                  <span id="copySigButton" class="icon is-small" data-tippy="Copy the original signature verbatim." data-tippy-arrow="true" data-tippy-distance="30">
+                    <i class="fas fa-clone"></i>
+                  </span>
+                    </a>
+                  </li>
+                  <li id="sigTab_generate" name="sigTabs">
+                    <a>
+                      <span id="generateSigButton" class="icon is-small" data-tippy="Generate a signature for the modified token." data-tippy-arrow="true" data-tippy-distance="30">
+                        <i class="fas fa-cogs"></i>
+                      </span>
+                    </a>
+                  </li>
+                  <li id="sigTab_omit" name="sigTabs">
+                    <a>
+                      <span id="omitSigButton" class="icon is-small" data-tippy="Omit the signature entirely." data-tippy-arrow="true" data-tippy-distance="30">
+                        <i class="fas fa-ban"></i>
+                      </span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              </div>
+            </div>
+           </nav>
+
            <textarea id="jwtSigSegment" class="textarea is-info" placeholder="yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw" readonly></textarea>
         </div>
       </div>
     </div>
+    {#Output#}
+    <div class="tile is-ancestor">
+      <div class="tile is-12">
+        <div class="tile is-child box">
+          <p class="subtitle">Modified Token</p>
+          <div id="outputToken" class="input">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
   </section>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script type="text/javascript" src="js/tippy.min.js"></script>
   <script>
-    const segmentColors = ['#23d160','#ff3860','#209cee', '#000000'];
+const UI = {
+  segments: [document.getElementById('jwtHeaderSegment'), document.getElementById('jwtBodySegment'), document.getElementById('jwtSigSegment')],
+  segmentColors: ['#23d160','#ff3860','#209cee', '#000000'],
+  tokenBox: document.getElementById('tokenBox'),
+  outputToken: document.getElementById('outputToken'),
+  repopulateButton: document.getElementById('repopulateButton')
+}
 
-    //dirty side-effect function
-    function showInBox(section, index) {
-        const targetElement = ['jwtHeaderSegment', 'jwtBodySegment', 'jwtSigSegment'];
-        if(index <= targetElement.length - 1) {
-            document.getElementById(targetElement[index]).value = index <= 1 ? atob(section) : section;
-        }
-        return section;
-        //otherwise do nothing. 
+let lastContent = UI.tokenBox.innerText;
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
+function clearSegments() {
+  UI.segments.forEach((i) => { i.value = ''});
+}
+
+//dirty side-effect function
+function showInBox(section, index) {
+    if(index <= UI.segments.length - 1) {
+        UI.segments[index].value = index <= 1 ? atob(section) : section;
     }
+    return section;
+    //otherwise do nothing. 
+}
 
-    function colorize(section, index) {
-        return `<p style="color:${segmentColors[index < 3 ? index : 3]}">${section}</p>`;
+function colorize(section, index) {
+    return `<p style="color:${UI.segmentColors[index < 3 ? index : 3]}">${section}</p>`;
+}
+
+function isDestructiveKey(event) {
+  //Check keyboard event for destructive behavior (e.g. printable, backspace, cut/paste)
+  //keycode 224 is a FF-specifc behavior for the mac command key
+  if(event.metaKey || event.ctrlKey || event.keyCode === 224) {
+    //fall through on destructive hotkeys
+    switch(event.keyCode) {
+      case 86: //v - paste
+      case 88: //x - cut
+        console.log(`destructive ${event.metaKey ? 'meta-' : ''}${event.ctrlKey ? 'ctrl-': ''}${event.keyCode}`);
+        return true;
+      default:
+        console.log(`non-destructive ${event.metaKey ? 'meta-' : ''}${event.ctrlKey ? 'ctrl-': ''}${event.keyCode}`);
+        return false;
     }
+  } else {
+        console.log(`destructive ${event.metaKey ? 'meta-' : ''}${event.ctrlKey ? 'ctrl-': ''}${event.keyCode}`);
 
-    function clearBoxes() {
-      // TODO implement
-    }
+    //lazy, but for now we're treating others as destructive
+    return true;
+  }
+}
 
-//TODO Throttle
-    function tokenBoxModified(box) {
-        box.innerHTML = box.innerText.replace(/\s/gm, '').split('.').map(showInBox).map(colorize).join('.');
-        box.scrollTo(0,0);
-    }
+const tokenBoxModified = debounce(function() {
+    UI.tokenBox.innerHTML = UI.tokenBox.innerText.replace(/\s/gm, '')
+                              .split('.')
+                              .map(showInBox)
+                              .map(colorize)
+                              .join('.'); 
+    UI.tokenBox.scrollTo(0,0);
+}, 250);
 
-
-// TODO stop repeatedly getting the same element by ID
-
-document.getElementById('tokenBox').addEventListener("focus", (e) => {
+UI.tokenBox.addEventListener("focus", (e) => {
   if(e.target.getElementsByClassName('placeholder').length > 0) {
     e.target.innerHTML = '';
   }
 });
 
-document.getElementById('tokenBox').addEventListener("blur", (e) => {
+UI.tokenBox.addEventListener("blur", (e) => {
   if(e.target.innerText.trim().length === 0) {
       e.target.innerHTML = '<span class="placeholder">Paste a JWT here.</span>';
-      clearBoxes();
+      clearSegments();
   }
 });
 
-//TODO Make conditional
-    document.getElementById('tokenBox').addEventListener("keyup",(e) => {
-        tokenBoxModified(e.target);
-    });
-    document.getElementById('tokenBox').addEventListener("paste", (e) => {
-      console.log(e);
-        tokenBoxModified(e.target);
-    })
-  </script>
+UI.tokenBox.addEventListener("keyup",(e) => {
+    if(isDestructiveKey(e)) {
+      //eventually this should PROMPT that the content has changed.
+      // tokenBoxModified();
+    }
+    console.log(e);
+});
+
+UI.tokenBox.addEventListener("paste", (e) => {
+    //requires a delay, which is provided by the debounce.
+    tokenBoxModified();
+})
+
+UI.repopulateButton.addEventListener("click", (e) => {
+  tokenBoxModified();
+})
+</script>
 {% endblock %}
