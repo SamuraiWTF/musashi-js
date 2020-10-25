@@ -21,7 +21,7 @@
           <p class="subtitle">Token</p><!--eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
 eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.
 yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
-          <div id="tokenBox" style="word-wrap: break; overflow: auto;" contenteditable="true"><span class="placeholder">Paste a JWT here.</span></div>
+          <div id="tokenBox" class="input" contenteditable="true"><span class="placeholder">Paste a JWT here.</span></div>
         </div>
       </div>
     </div>
@@ -64,12 +64,18 @@ yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw-->
         return `<p style="color:${segmentColors[index < 3 ? index : 3]}">${section}</p>`;
     }
 
+    function clearBoxes() {
+      // TODO implement
+    }
 
 //TODO Throttle
     function tokenBoxModified(box) {
         box.innerHTML = box.innerText.replace(/\s/gm, '').split('.').map(showInBox).map(colorize).join('.');
         box.scrollTo(0,0);
     }
+
+
+// TODO stop repeatedly getting the same element by ID
 
 document.getElementById('tokenBox').addEventListener("focus", (e) => {
   if(e.target.getElementsByClassName('placeholder').length > 0) {
@@ -79,7 +85,8 @@ document.getElementById('tokenBox').addEventListener("focus", (e) => {
 
 document.getElementById('tokenBox').addEventListener("blur", (e) => {
   if(e.target.innerText.trim().length === 0) {
-        e.target.innerHTML = '<span class="placeholder">Paste a JWT here.</span>';
+      e.target.innerHTML = '<span class="placeholder">Paste a JWT here.</span>';
+      clearBoxes();
   }
 });
 
