@@ -1,6 +1,8 @@
 const express = require('express')
 const nunjucks = require('nunjucks')
 
+const stringToBool = require('../common/stringToBool')
+
 const app = express()
 const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('client.cors.demo/views'))
 
@@ -34,15 +36,3 @@ app.post('/ex/:exnum', (req, res) => {
 })
 
 module.exports = app
-
-function stringToBool(str) {
-    let test = str.toUpperCase().trim();
-    if(["TRUE","Y","YES","1"].indexOf(test) > -1) {
-      return true
-    } else if (["FALSE","N","NO","0"].indexOf(test) > -1) {
-      return false
-    } else {
-      console.error(`Invalid value in stringToBool: ${str}`)
-      return undefined
-    }
-  }
