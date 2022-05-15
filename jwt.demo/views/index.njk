@@ -116,9 +116,14 @@ yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw  -- sample for testing #}
 const UI = {
   segments: [document.getElementById('jwtHeaderSegment'), document.getElementById('jwtBodySegment'), document.getElementById('jwtSigSegment')],
   segmentColors: ['#23d160','#ff3860','#209cee', '#000000'],
+  signatureOptions: [document.getElementById('sigTab_copy'), document.getElementById('sigTab_generate'), document.getElementById('sigTab_omit')],
   tokenBox: document.getElementById('tokenBox'),
   outputToken: document.getElementById('outputToken'),
   repopulateButton: document.getElementById('repopulateButton')
+}
+
+const CONFIG = {
+  sigBehavior: 0
 }
 
 let lastContent = UI.tokenBox.innerText;
@@ -140,6 +145,32 @@ function debounce(func, wait, immediate) {
 
 function clearSegments() {
   UI.segments.forEach((i) => { i.value = ''});
+}
+
+function signHs256(payload, secret) {
+  return new Promise((resolve, reject) => {
+      let enc = new TextEncoder("utf-8");
+      window.crypto.subtle.importKey(
+        "raw", 
+        enc.encode(secret),
+        { 
+            name: "HMAC",
+            hash: {name: "SHA-256"}
+        },
+        false, 
+        ["sign", "verify"] 
+      ).then( key => {
+        window.crypto.subtle.sign(
+            "HMAC",
+            key,
+            enc.encode(payload)
+        ).then(signature => {
+            let b = new Uint8Array(signature)
+            let sig = Array.prototype.map.call(b, x => ('00'+x.toString(16)).slice(-2)).join("")
+            resolve(payload + '.' + sig)
+        })
+    })
+  })
 }
 
 //dirty side-effect function
@@ -186,6 +217,32 @@ const tokenBoxModified = debounce(function() {
     UI.tokenBox.scrollTo(0,0);
 }, 250);
 
+const segmentModified = debounce(function() {
+  // regenerate modified token
+  let sig = '';
+  switch(CONFIG.sigBehavior) {
+    case 0:
+      sig = 'copy';
+      break;
+    case 1:
+      sig = 'generate';
+      break;
+    case 2:
+      sig = 'omit';
+  }
+  outputToken.innerText = `${btoa(UI.segments[0].value).replace(/==?$/, '')}.${btoa(UI.segments[1].value).replace(/==?$/, '')}.${sig}`
+}, 250);
+
+UI.signatureOptions.forEach((tab, i) => {
+  tab.addEventListener("click", e => {
+    UI.signatureOptions.forEach(item => {
+      item.classList.remove('is-active');
+    });
+    tab.classList.add('is-active');
+    CONFIG.sigBehavior = i;
+  })
+})
+
 UI.tokenBox.addEventListener("focus", (e) => {
   if(e.target.getElementsByClassName('placeholder').length > 0) {
     e.target.innerHTML = '';
@@ -215,5 +272,10 @@ UI.tokenBox.addEventListener("paste", (e) => {
 UI.repopulateButton.addEventListener("click", (e) => {
   tokenBoxModified();
 })
+
+
+
+UI.segments[0].addEventListener("")
+
 </script>
 {% endblock %}
