@@ -30,6 +30,8 @@ There are a handful of settings in the `.env` file. Here's what they are and wha
  - **OAUTH_CLIENT_PORT** (default: `3031`) - Port to bind to for the OAuth Client app *(Currently disabled)*
  - **CSP_APP_PORT** (default: `3041`) - Port to bind to for the Content Security Policy demo app
  - **USE_TLS** (default: `FALSE`) - Affects the protocol used in the CORS demonstrator to call the API. `TRUE` for **https**, `FALSE` for **http**. *This does not actually enable TLS on the listener at this time. It's useful if going through a reverse-proxy with TLS enabled. In a future release, it will be required that this be TRUE. This is due to coming changes in standard browser behavior around cookies.*
+ - **KEYSTORE_FILE** (default: undefined) - Optional path to a PKCS#12 keystore file for using a self-signed certificate. For example, this can be an exported certificate from Burp Suite. Note that USE_TLS must be `TRUE` for this to function properly.
+ - **KEYSTORE_PASS** (default: undefined) - Required if `KEYSTORE_FILE` is defined. It is the passphrase for the keystore file.
 
 Here's a default local dev configuration:
 ```
