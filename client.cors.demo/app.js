@@ -6,8 +6,8 @@ const stringToBool = require('../common/stringToBool')
 const app = express()
 const jucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader('client.cors.demo/views'))
 
-const apiHost = process.env.CORS_API_HOST || 'api.cors.test:8443';
-const protocol = stringToBool(process.env.USE_HTTP) ? 'http' : 'https'; // default to https
+const apiHost = `${process.env.CORS_API_HOST || 'api.cors.test'}:${process.env.CORS_API_PROXY_PORT || '8443'}`;
+const protocol = stringToBool(process.env.USE_TLS) ? 'https' : 'http';
 
 // Escape backticks - for dumping variables into template literals on the front-end.
 jucksEnv.addFilter("escbt", (str) => {
