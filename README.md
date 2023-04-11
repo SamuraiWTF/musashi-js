@@ -65,3 +65,16 @@ USE_TLS=FALSE
   3. The *Set CSP* page allows you to set a custom content-security-policy. This applies across the application, except on the *Set CSP* page itself. It may not have every directive, but the all of the common ones and some of the uncommon ones are included. Including the string `$nonce` in any of the directives will have it replaced with an actual generated nonce at dynamically when the policy header is served.
   4. Each of the *Execises* provides a CSP bypass or evasion challenge. They each have a button that replaces the application's CSP with the challenge CSP. They also have directions explaining the success condition for the exercise.
  
+## Running from a docker container
+We have a Dockerfile!  So you can build and run the dockerized version as a convenience.
+
+### Building the docker image
+```
+docker build -t musashi-js .
+```
+### Running the docker image
+```
+docker run -p 3020:3020 -p 3021:3021 -p 3030:3030 -p 3031:3031 -p 3041:3041 musashi-js
+```
+
+_Note: The ports are mapped to the same ports as the default configuration.  If you change the ports in your .env file, you will need to change the port mappings in the docker run command._
