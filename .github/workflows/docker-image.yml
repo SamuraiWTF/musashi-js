@@ -32,5 +32,5 @@ jobs:
         echo IMAGE_ID=$IMAGE_ID
         echo VERSION=$VERSION
         docker build . --file .shogun/Dockerfile.musashi-js --tag musashi-js
-        docker tag dojo-basic $IMAGE_ID:$VERSION
+        docker tag musashi-js $IMAGE_ID:$VERSION
         docker push $IMAGE_ID:$VERSION
