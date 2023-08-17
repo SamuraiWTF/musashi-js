@@ -1,0 +1,23 @@
+version: '3'
+services:
+  musashi:
+    build:
+      context: ..
+      dockerfile: .shogun/Dockerfile.musashi-js
+    ports:
+      - "8080:3021"
+      - "8081:3020"
+      - "8084:3041"
+      - "8085:3050"
+    environment:
+      CORS_API_PORT: 3020
+      CORS_API_HOST: student1.api.musashi.example.com
+      CORS_API_PROXY_PORT: 443
+      CORS_CLIENT_HOST: student1.cors.musashi.example.com
+      CORS_CLIENT_PORT: 3021
+      OAUTH_PROVIDER_PORT: 3030
+      OAUTH_CLIENT_PORT: 3031
+      CSP_APP_PORT: 3041
+      USE_TLS: TRUE
+      JWT_HOST: student1.jwt.musashi.example.com
+      JWT_PORT: 3050
